@@ -19,9 +19,8 @@
 ## News and ToDo
 
 - [ ] Release UniDepth on PyPI.
-- [ ] Release smaller models.
 - [ ] Release HuggingFace/Gradio demo.
-- [ ] Release UniDepthV2.
+- [ ] Release UniDepthV2 and smaller models (Base and Small).
 - [x] `02.04.2024`: Release UniDepth as python package.
 - [x] `01.04.2024`: Inference code and V1 models are released.
 - [x] `26.02.2024`: UniDepth is accepted at CVPR 2024!
@@ -86,21 +85,12 @@ If you encounter `Segmentation Fault` after running the demo, you may need to un
 
 ## Get Started
 
-After installing the dependencies, you can load the pre-trained models easily through TorchHub. For instance, if you want UniDepth v1 with Dino backbone:
-```python
-import torch
-
-version="v1"
-backbone="ViTL14"
-model = torch.hub.load("lpiccinelli-eth/UniDepth", "UniDepth", version=version, backbone=backbone, pretrained=True, trust_repo=True, force_reload=True)
-```
-
-or via HuggingFace API:
+After installing the dependencies, you can load the pre-trained models easily from [Hugging Face](https://huggingface.co/models?other=UniDepth) as follows:
 
 ```python
-from unidepth.models import UniDepthV1HF
+from unidepth.models import UniDepthV1
 
-model = UniDepthV1HF.from_pretrained(backbone="ViTL14")
+model = UniDepthV1.from_pretrained("lpiccinelli/unidepth-v1-vitl14") # or "lpiccinelli/unidepth-v1-cnvnxtl" for the ConvNext backbone
 ```
 
 Then you can generate the metric depth estimation and intrinsics prediction directly from RGB image only as follows:
@@ -150,27 +140,19 @@ data = {"image": rgb, "K": intrinsics}
 predictions = model(data, {})
 ```
 
-For easy-to-use, we provide our models via TorchHub where you need to specify version and backbone as:
+Please visit [Hugging Face](https://huggingface.co/lpiccinelli) to access the repo models with weights. You can load V1 of UniDepth as:
+
 ```python
-torch.hub.load("lpiccinelli-eth/UniDepth", "UniDepth", version=version, backbone=backbone, pretrained=True, trust_repo=True, force_reload=True)
+from unidepth.models import UniDepthV1
+
+model = UniDepthV1.from_pretrained(f"lpiccinelli/unidepth-v1-{backbone}")
 ```
 
-For improved flexibility, we provide a UniDepth as HuggingFace model where you need to import the version wanted and specify the backbone:  
-```python
-from unidepth.models import UniDepthV1HF
+where backbones available are: "vitl14" or "cnvnxtl".
 
-model = UniDepthV1HF.from_pretrained(backbone=backbone)
-```
+You can look into function `UniDepth` in [hubconf.py](hubconf.py) to see how to instantiate the model from local file (just provide a local `path` in line 34) and how to use TorchHub loading.
 
-Mappings:  
-  - Version 1: version="v1"
-  - Version 2: version="v2"
-  - ViT Large: backbone="ViTL14"
-  - ConvNext Large: backbone="ConvNextL"
 
-For HuggingFace API you will need to import different UniDepth model for different versions.
-
-Please visit [HuggingFace](https://huggingface.co/lpiccinelli) to access the repo models with weights.
 
 ## Results
 
@@ -214,5 +196,7 @@ This software is released under Creatives Common BY-NC 4.0 license. You can view
 
 
 ## Acknowledgement
+
+We would like to express our gratitude to [@niels](https://huggingface.co/nielsr) for helping intergrating UniDepth in HuggingFace.
 
 This work is funded by Toyota Motor Europe via the research project [TRACE-Zurich](https://trace.ethz.ch) (Toyota Research on Automated Cars Europe).
