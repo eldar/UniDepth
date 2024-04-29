@@ -134,7 +134,7 @@ class UniDepthV1(nn.Module):
             self.pixel_decoder.test_fixed_camera = True  # use GT camera in fwd
 
         # Decode
-        pred_intrinsics, predictions, _ = self.pixel_decoder(inputs, {})
+        pred_intrinsics, predictions, _, _ = self.pixel_decoder(inputs, {})
         predictions = sum(
             [
                 F.interpolate(
@@ -224,7 +224,7 @@ class UniDepthV1(nn.Module):
             self.pixel_decoder.skip_camera = skip_camera
 
         # decode all
-        pred_intrinsics, predictions, _ = self.pixel_decoder(inputs, {})
+        pred_intrinsics, predictions, _, _ = self.pixel_decoder(inputs, {})
 
         # undo the reshaping and get original image size (slow)
         predictions, pred_intrinsics = _postprocess(

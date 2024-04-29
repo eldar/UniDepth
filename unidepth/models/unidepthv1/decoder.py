@@ -468,7 +468,7 @@ class Decoder(nn.Module):
             level_embed=level_embed,
         )
 
-        return intrinsics, [out8, out4, out2], depth_features
+        return intrinsics, [out8, out4, out2], depth_features, rays
 
     @torch.jit.ignore
     def no_weight_decay_keywords(self):
